@@ -1,0 +1,82 @@
+.App {
+    text-align: left;
+    font-family: Helvetica Neue; 
+    font-weight: bold;
+  }
+  .form-group {
+    text-align: left;
+    font-family: Helvetica Neue; 
+    font-weight: bold;
+    
+  }
+  
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .App-link {
+    color: #61dafb;
+  }
+
+  p#header{
+    text-align: center;
+    font-size: 2.0em;
+    font-family: fantasy;
+    color:black;
+    margin-top:-45px;
+  
+  }
+  p#name{
+    text-align: left;
+    font-size: 2.5em;
+    font-family: fantasy;
+    color:black;
+    margin-top:-30px;
+  }
+  
+  p#subheader{
+    text-align: center;
+    font-family: fantasy;
+    color:black;
+    margin-top:-70px;
+    font-size: 1.8em;
+    
+  }
+  
+  .table {
+    background-color: white;
+    border-radius: 20px;
+    height: 640px;
+    padding: 0 10px 10px 10px;
+    overflow-y: auto;
+   
+  }
+  @media screen and (min-width: 1024px) {
+    .grid-1-2 {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      align-items: start;
+      gap: 1rem;
+    }
+    .grid-1-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: start;
+      gap: 2rem;
+    }
+  }
+  
+img.icon{
+	display: block;
+	margin:50px auto;
+	background-color: rgba(255, 255, 255, 0);
+	width:70px;
+	padding:10px;
+}
