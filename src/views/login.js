@@ -99,13 +99,13 @@ class Login extends Component {
         }
     }
   iniciarSesion = async () => {
-    axios.get(`https://conecttaller.azurewebsites.net/API/empleados/login/` + this.state.form.Username)
+    axios.get(`https://apifix.azurewebsites.net/API/empleados/login/` + this.state.form.Username)
       .then(response => {
         return response.data;
       })
       .then(response => {
         if (response.length > 0) {
-          axios.get(`https://conecttaller.azurewebsites.net/API/empleados/loginc/` + this.state.form.Contrasena)
+          axios.get(`https://apifix.azurewebsites.net/API/empleados/loginc/` + this.state.form.Contrasena)
             .then(response => {
               return response.data;
             })
@@ -151,13 +151,13 @@ class Login extends Component {
   }
 
   iniciarSesionMecanico = async () => {
-    axios.get(`https://conecttaller.azurewebsites.net/API/mecanicos/login/` + this.state.form.Username)
+    axios.get(`https://apifix.azurewebsites.net/API/mecanicos/login/` + this.state.form.Username)
       .then(response => {
         return response.data;
       })
       .then(response => {
         if (response.length > 0) {
-          axios.get(`https://conecttaller.azurewebsites.net/API/mecanicos/loginc/` + this.state.form.Contrasena)
+          axios.get(`https://apifix.azurewebsites.net/API/mecanicos/loginc/` + this.state.form.Contrasena)
             .then(response => {
               return response.data;
             })
@@ -223,7 +223,7 @@ class Login extends Component {
           <span id="msgIDU" class="color"></span>
           </FormGroup> 
           <FormGroup>
-          <input type="passworda" className="form-control"  name='Contrasena' id='Contrasena' placeholder="Contraseña" onChange={this.handleChange} value={this.state.form.Contrasena} />
+          <input type="passworda"   name='Contrasena' id='Contrasena' placeholder="Contraseña" onChange={this.handleChange} value={this.state.form.Contrasena} />
           </FormGroup> 
           <span id="msgIDC" class="color"></span>
           <Button onClick={() => this.validaciones()}> Iniciar Sesión Administrador </Button>

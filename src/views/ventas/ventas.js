@@ -83,14 +83,14 @@ window.Swal = Swal;
 
   const fetchProductos = async() => {
    
-    const result = await axios.get('https://conecttaller.azurewebsites.net/API/productos');
-    const result2 = await axios.get('https://conecttaller.azurewebsites.net/API/servicios');
-    const result3 = await axios.get('https://conecttaller.azurewebsites.net/API/clientes/idc');
-    const result4 = await axios.get('https://conecttaller.azurewebsites.net/API/empleados/ide');
-    const result5 = await axios.get('https://conecttaller.azurewebsites.net/API/servicios/ids');
-    const result6 = await axios.get('https://conecttaller.azurewebsites.net/API/vehiculos/idv');
-    const result7 = await axios.get('https://conecttaller.azurewebsites.net/API/mecanicos/idm');
-    const result8 =  await axios.get('https://conecttaller.azurewebsites.net/API/ventas/last');
+    const result = await axios.get('https://apifix.azurewebsites.net/API/productos');
+    const result2 = await axios.get('https://apifix.azurewebsites.net/API/servicios');
+    const result3 = await axios.get('https://apifix.azurewebsites.net/API/clientes/idc');
+    const result4 = await axios.get('https://apifix.azurewebsites.net/API/empleados/ide');
+    const result5 = await axios.get('https://apifix.azurewebsites.net/API/servicios/ids');
+    const result6 = await axios.get('https://apifix.azurewebsites.net/API/vehiculos/idv');
+    const result7 = await axios.get('https://apifix.azurewebsites.net/API/mecanicos/idm');
+    const result8 =  await axios.get('https://apifix.azurewebsites.net/API/ventas/last');
    
     setProductos(await result.data);
     setServicios(await result2.data);
@@ -300,7 +300,7 @@ window.Swal = Swal;
   }
   
   const peticionPostV=async()=>{
-  await axios.post(`https://conecttaller.azurewebsites.net/API/ventas/agregar/`,state.formV).then(response=>{
+  await axios.post(`https://apifix.azurewebsites.net/API/ventas/agregar/`,state.formV).then(response=>{
    }).then(async() => {
     
      Swal.fire({
@@ -316,7 +316,7 @@ window.Swal = Swal;
    
  } 
  const peticionPostR=async()=>{
-await axios.post(`https://conecttaller.azurewebsites.net/API/reparaciones/agregar/`,state.formR).then(response=>{
+await axios.post(`https://apifix.azurewebsites.net/API/reparaciones/agregar/`,state.formR).then(response=>{
 }).then(async() => {
 
 })

@@ -25,7 +25,7 @@ state={
   } 
 }
 peticionGet=async()=>{
-await axios.get(`https://conecttaller.azurewebsites.net/API/vehiculos`).then(response=>{
+await axios.get(`https://apifix.azurewebsites.net/API/vehiculos`).then(response=>{
   this.setState({data: response.data});
 }).catch(error=>{
   console.log(error.message);
@@ -33,7 +33,7 @@ await axios.get(`https://conecttaller.azurewebsites.net/API/vehiculos`).then(res
 }
 
 peticionGetid=async()=>{
-  await axios.get(`https://conecttaller.azurewebsites.net/API/clientes/idc`).then((response)=>{
+  await axios.get(`https://apifix.azurewebsites.net/API/clientes/idc`).then((response)=>{
     this.setState({  cliente: response.data });
   }).catch(error=>{
     console.log(error.message);
@@ -41,7 +41,7 @@ peticionGetid=async()=>{
   }
 
 peticionPost=async()=>{
- await axios.post(`https://conecttaller.azurewebsites.net/API/vehiculos/agregar/`,this.state.form).then(response=>{
+ await axios.post(`https://apifix.azurewebsites.net/API/vehiculos/agregar/`,this.state.form).then(response=>{
   }).then(async() => {
     Swal.fire({
       position: 'center',
@@ -56,7 +56,7 @@ peticionPost=async()=>{
 }
 
 peticionPut=()=>{
-  axios.put(`https://conecttaller.azurewebsites.net/API/vehiculos/actualizar/`, this.state.form).then(response=>{
+  axios.put(`https://apifix.azurewebsites.net/API/vehiculos/actualizar/`, this.state.form).then(response=>{
   }).then(async() => {
     Swal.fire({
       position: 'center',
@@ -83,7 +83,7 @@ peticionPut=()=>{
       cancelButtonText: 'No'
     }).then(async(result) => {
       if (result.isConfirmed) {
-        axios.get(`https://conecttaller.azurewebsites.net/API/vehiculos/eliminar/`+this.state.form.IDVehiculo)
+        axios.get(`https://apifix.azurewebsites.net/API/vehiculos/eliminar/`+this.state.form.IDVehiculo)
         Swal.fire({
           position: 'center',
           icon: 'success',

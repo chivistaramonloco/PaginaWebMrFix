@@ -25,7 +25,7 @@ state={
 }
 
 peticionGet=async()=>{
-await axios.get(`https://conecttaller.azurewebsites.net/API/productos`).then(response=>{
+await axios.get(`https://apifix.azurewebsites.net/API/productos`).then(response=>{
   this.setState({data: response.data});
 }).catch(error=>{
   console.log(error.message);
@@ -33,7 +33,7 @@ await axios.get(`https://conecttaller.azurewebsites.net/API/productos`).then(res
 }
 
 peticionPost=async()=>{
- await axios.post(`https://conecttaller.azurewebsites.net/API/productos/agregar/`,this.state.form).then(response=>{
+ await axios.post(`https://apifix.azurewebsites.net/API/productos/agregar/`,this.state.form).then(response=>{
   }).then(async() => {
    
     Swal.fire({
@@ -50,7 +50,7 @@ peticionPost=async()=>{
 }
 
 peticionPut=()=>{
-   axios.put(`https://conecttaller.azurewebsites.net/API/productos/actualizar/`, this.state.form).then(response=>{
+   axios.put(`https://apifix.azurewebsites.net/API/productos/actualizar/`, this.state.form).then(response=>{
   }).then(async() => {
     Swal.fire({
       position: 'center',
@@ -77,7 +77,7 @@ peticionPut=()=>{
       cancelButtonText: 'No'
     }).then(async(result) => {
       if (result.isConfirmed) {
-        axios.get(`https://conecttaller.azurewebsites.net/API/productos/eliminar/`+this.state.form.IDProducto)
+        axios.get(`https://apifix.azurewebsites.net/API/productos/eliminar/`+this.state.form.IDProducto)
         Swal.fire({
           position: 'center',
           icon: 'success',

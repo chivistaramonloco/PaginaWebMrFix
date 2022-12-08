@@ -25,7 +25,7 @@ state={
 }
 
 peticionGet=async()=>{
-await axios.get(`https://conecttaller.azurewebsites.net/API/reparaciones`).then(response=>{
+await axios.get(`https://apifix.azurewebsites.net/API/reparaciones`).then(response=>{
   this.setState({data: response.data});
 }).catch(error=>{
   console.log(error.message);
@@ -33,7 +33,7 @@ await axios.get(`https://conecttaller.azurewebsites.net/API/reparaciones`).then(
 }
 
 peticionPut=()=>{
-  axios.put(`https://conecttaller.azurewebsites.net/API/reparaciones/actualizar/`, this.state.form).then(response=>{
+  axios.put(`https://apifix.azurewebsites.net/API/reparaciones/actualizar/`, this.state.form).then(response=>{
   }).then(async() => {
     Swal.fire({
       position: 'center',
@@ -59,7 +59,7 @@ peticionPut=()=>{
       cancelButtonText: 'No'
     }).then(async(result) => {
       if (result.isConfirmed) {
-        axios.get(`https://conecttaller.azurewebsites.net/API/reparaciones/eliminar/`+this.state.form.IDReparacion)
+        axios.get(`https://apifix.azurewebsites.net/API/reparaciones/eliminar/`+this.state.form.IDReparacion)
         Swal.fire({
           position: 'center',
           icon: 'success',
