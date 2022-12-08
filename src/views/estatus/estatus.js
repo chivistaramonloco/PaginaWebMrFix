@@ -206,7 +206,7 @@ console.log(this.state.form);
                     <label>ID Servicio</label>
                     <input className="form-control" type="texte"   name="IDServicio"  readOnly id="IDServicio"  onChange={this.handleChange} value={form?form.IDServicio: ''}/>
                     <label>ID Vehiculo</label>
-                    <input className="form-control" type="texte"   name="IDVehiculo" readOnlyid="IDVehiculo"  onChange={this.handleChange} value={form?form.IDVehiculo: ''}/>
+                    <input className="form-control" type="texte"   name="IDVehiculo" readOnly id="IDVehiculo"  onChange={this.handleChange} value={form?form.IDVehiculo: ''}/>
                     <label>ID Mecanico</label>
                     <input className="form-control" type="texte"   name="IDMecanico" readOnly id="IDMecanico"  onChange={this.handleChange} value={form?form.IDMecanico: ''}/>
                 </ModalBody>
