@@ -1,6 +1,7 @@
 import "./ventas.css"
 import React, {useEffect, useRef, useState} from 'react'
 import axios from "axios"
+import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { useReactToPrint } from 'react-to-print';
 import regresar from "./../viewimages/regresar.png";
@@ -457,9 +458,9 @@ if(Subtotal1  === 0  ){
         </div>
      </div> <div className='mt-3'>
           { (Subtotal1 || Subtotal) !== 0 ? <div>
-            <button className='btn btn-primary' onClick={validaciones}>
+            <Button className='btn btn-primary' onClick={validaciones}>
               Pagar
-            </button>
+            </Button>
           </div> : 'Por favor, agrega un producto o servicio'
           }
         </div>
