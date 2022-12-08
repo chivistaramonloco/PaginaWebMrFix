@@ -223,7 +223,7 @@ class Login extends Component {
           <span id="msgIDU" class="color"></span>
           </FormGroup> 
           <FormGroup>
-          <input type="passworda"  name='Contrasena' id='Contrasena' placeholder="Contraseña" onChange={this.handleChange} value={this.state.form.Contrasena} />
+          <input type="password"  name='Contrasena' id='Contrasena' placeholder="Contraseña" onChange={this.handleChange} value={this.state.form.Contrasena} />
          
           </FormGroup> 
           <span id="msgIDC" class="color"></span>
