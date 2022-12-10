@@ -4,9 +4,10 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faFloppyDisk, faRectangleXmark,  faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Modal, ModalBody, ModalFooter, ModalHeader,FormGroup } from 'reactstrap';
+import { faEdit, faFloppyDisk, faRectangleXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Modal, ModalBody, ModalFooter, ModalHeader, FormGroup } from 'reactstrap';
 import regresar from "./../viewimages/regresar.png";
+import historial from "./../viewimages/historial.png";
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 window.Swal = Swal;
@@ -15,12 +16,13 @@ state={
   data:[],
   modalE: false,
   form:{
-    IDReparacion:'',
+    IDReparacion: '',
     IDVenta:'',
-    Estatus:'',
-    IDServicio:'',
-    IDVehiculo:'',
-    IDMecanico:''
+    Estatus: '',
+    Observaciones: '',
+    TipoServicio:'',
+    Vehiculo:'',
+    Mecanico:''
   }
 }
 
@@ -47,30 +49,20 @@ peticionPut=()=>{
     this.peticionGet();
   })
 }
-
- peticionDelete=  () =>{
-  Swal.fire({
-      title: 'Estas seguro de eliminar?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si',
-      cancelButtonText: 'No'
-    }).then(async(result) => {
-      if (result.isConfirmed) {
-        axios.get(`https://apifix.azurewebsites.net/API/reparaciones/eliminar/`+this.state.form.IDReparacion)
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'Servicio eliminado correctamente',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      }
-    
-      this.peticionGet();
-    })
+peticionPost=async()=>{
+  await axios.get(`https://apifix.azurewebsites.net/API/reparaciones/eliminar/`+this.state.form.IDReparacion)
+   await axios.post(`https://apifix.azurewebsites.net/API/historial/agregar/`,this.state.form).then(response=>{
+   }).then(async() => {
+     Swal.fire({
+       position: 'center',
+       icon: 'success',
+       title: 'Reparación finalizada',
+       showConfirmButton: false,
+       timer: 1500
+     })
+     this.modalE();
+    this.peticionGet();
+   })
 }
 
 
@@ -82,18 +74,18 @@ seleccionarReparacion=(reparacion)=>{
   this.setState({
     tipoModal: 'actualizar',
     form: {
-        IDReparacion:reparacion.IDReparacion,
-        IDVenta:reparacion.IDVenta,
-        Estatus:reparacion.Estatus,
-        IDServicio:reparacion.IDServicio,
-        IDVehiculo:reparacion.IDVehiculo,
-        IDMecanico:reparacion.IDMecanico
+        IDReparacion: reparacion.IDReparacion,
+        IDVenta: reparacion.IDVenta,
+        Estatus: reparacion.Estatus,
+        Observaciones: reparacion.Observaciones,
+        TipoServicio: reparacion.TipoServicio,
+        Vehiculo: reparacion.Vehiculo,
+        Mecanico: reparacion.Mecanico
     }
   })
 }
 
 handleChange=async e=>{
-
 e.persist();
 await this.setState({
   form:{
@@ -103,42 +95,66 @@ await this.setState({
 });  
 console.log(this.state.form);
 }
-
   componentDidMount() {
     this.peticionGet();
   }
   validaciones=()=>{
     var validanom= /^[a,-z,-A,-Z,-À,-ÿ,-0,-9,-\s+]{4,500}$/;
     let est = document.getElementById("Estatus").value;
+    let obs = document.getElementById("Observaciones").value;
     let checador = 0;
     if (est.length===0 )  {
       document.getElementById("msgTS").innerText = "Campo Vacío";
       document.getElementById("msgTS").style.color= "red";
       document.getElementById("Estatus").style.borderColor="red";
     }else{
+      checador+=1;
       document.getElementById("msgTS").innerText = "";
       document.getElementById("msgTS").style.color= "";
       document.getElementById("Estatus").style.borderColor="";
-      if(est.match(validanom)){
+    }
+    if (obs.length===0 )  {
+      document.getElementById("msgOS").innerText = "Campo Vacío";
+      document.getElementById("msgOS").style.color= "red";
+      document.getElementById("Observaciones").style.borderColor="red";
+    }else{
+      document.getElementById("msgOS").innerText = "";
+      document.getElementById("msgOS").style.color= "";
+      document.getElementById("Observaciones").style.borderColor="";
+      if(obs.match(validanom)){
         checador+=1;
-        document.getElementById("msgTS").innerText = "";
-        document.getElementById("msgTS").style.color= "";
-        document.getElementById("Estatus").style.borderColor="";
+        document.getElementById("msgOS").innerText = "";
+        document.getElementById("msgOS").style.color= "";
+        document.getElementById("Observaciones").style.borderColor="";
       }
       else {
-        document.getElementById("msgTS").innerText = "solo acepta letras, minimo 4 letras y maximo 500";
-        document.getElementById("msgTS").style.color= "red";
-        document.getElementById("Estatus").style.borderColor="red";
+        document.getElementById("msgOS").innerText = "solo acepta letras, minimo 4 letras y maximo 500";
+        document.getElementById("msgOS").style.color= "red";
+        document.getElementById("Observaciones").style.borderColor="red";
       }
     }
     
-      if(checador===1){
+      if(checador===2){
           this.peticionPut();
-        
       }
   }
+cambiar=()=>{
+  let get=document.getElementById("Estatus").value;
+  if(get==="Finalizado"){
+    this.peticionPost();
+  }else{
+    Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: 'Seleccione el estatus Finalizado',
+      showConfirmButton: false,
+      timer: 3000
+    })
+  }
+}
+
   render(){
-    const {form}=this.state; 
+  const {form}=this.state; 
   return (
     <div className="App">
        <div >
@@ -149,6 +165,9 @@ console.log(this.state.form);
         <Link to='/Menu'>
       <img src={regresar} alt="imagen para regresar al menú" className="icon" align="right" width="150%" height="150%"/>
       </Link>
+      <Link to='/Historial'>
+      <img src={historial} alt="historial" className="icon" align="right" width="150%" height="150%" padding= "150px"/>
+      </Link>
         </div>
         <div id="titulo">
           <p id="header">MR.FIX</p>
@@ -156,16 +175,17 @@ console.log(this.state.form);
           <p id="subheader">TALLER MECANICO</p>
         </div>
         </div>
-   <div class="table"> 
+    <div class="table"> 
     <table class="table" >
-          <thead>
+        <thead>
         <tr>
         <th>IDReparacion</th>
         <th>IDVenta</th>
         <th>Estatus</th>
-        <th>IDServicio</th>
-        <th>IDVehiculo</th>
-        <th>IDMecanico</th>
+        <th>Observaciones</th>
+        <th>Servicio</th>
+        <th>Vehiculo</th>
+        <th>Mecanico</th>
         </tr>
       </thead>
       <tbody>
@@ -175,44 +195,56 @@ console.log(this.state.form);
             <td>{reparacion.IDReparacion}</td>
             <td>{reparacion.IDVenta}</td>
             <td>{reparacion.Estatus}</td>
-            <td>{reparacion.IDServicio}</td>
-            <td>{reparacion.IDVehiculo}</td>
-            <td>{reparacion.IDMecanico}</td>
+            <td>{reparacion.Observaciones}</td>
+            <td>{reparacion.TipoServicio}</td>
+            <td>{reparacion.Vehiculo}</td>
+            <td>{reparacion.Mecanico}</td>
             <td>
               <button className="btn btn-primary" onClick={()=>{this.seleccionarReparacion(reparacion); this.modalE()}}><FontAwesomeIcon icon={faEdit}/></button>
-              <button className="btn btn-danger" onClick={()=>{this.seleccionarReparacion(reparacion); this.peticionDelete()}}><FontAwesomeIcon icon={faTrashAlt}/></button>
-            </td>
+              </td>
           </tr>
           )
         })}
       </tbody>
     </table>
     </div>
-    
     <Modal isOpen={this.state.modalE}>
                 <ModalHeader style={{display: 'block'}}>
                   REPARACIONES
                 </ModalHeader>
                 <ModalBody>
                     <label>ID Reparacion</label>
-                    <input className="form-control" type="texte" name="IDVenta" readOnly id="IDVenta"  onChange={this.handleChange} value={form?form.IDVenta:''}/>
+                    <input className="form-control" type="texte" name="IDReparacion" readOnly id="IDReparacion"  onChange={this.handleChange} value={form?form.IDReparacion:''}/>
                     <label>ID Venta</label>
-                    <input className="form-control" type="texte" name="IDVenta" readOnly id="IDVenta"  onChange={this.handleChange} value={form?form.IDVenta:''}/>
+                    <input className="form-control" type="texte" name="IDVenta" readOnly id="IDVenta"  value={form?form.IDVenta:''}/>
                     <FormGroup>
                     <label>Estatus</label>
-                    <input class="form-control " type="texte"  name="Estatus"   id="Estatus"  onChange={this.handleChange} value={form?form.Estatus:''}/>
+                    <select className="form-control" type="texte" name="Estatus" id="Estatus" onChange={this.handleChange} value={form?form.Estatus: ''}  >  
+                    <option></option> 
+                    <option>En espera</option> 
+                    <option>En diagnostico</option> 
+                    <option>En reparación</option> 
+                    <option>Listo para entregar</option> 
+                    <option>Finalizado</option> 
+                    </select> 
                     <span id="msgTS" class="color"></span>
                     </FormGroup>
-                    <label>ID Servicio</label>
-                    <input className="form-control" type="texte"   name="IDServicio"  readOnly id="IDServicio"  onChange={this.handleChange} value={form?form.IDServicio: ''}/>
-                    <label>ID Vehiculo</label>
-                    <input className="form-control" type="texte"   name="IDVehiculo" readOnly id="IDVehiculo"  onChange={this.handleChange} value={form?form.IDVehiculo: ''}/>
-                    <label>ID Mecanico</label>
-                    <input className="form-control" type="texte"   name="IDMecanico" readOnly id="IDMecanico"  onChange={this.handleChange} value={form?form.IDMecanico: ''}/>
+                    <FormGroup>
+                    <label>Observaciones</label>
+                    <input className="form-control" type="texte"  name="Observaciones"  id="Observaciones"  onChange={this.handleChange} value={form?form.Observaciones: ''}/>
+                    <span id="msgOS" class="color"></span>
+                    </FormGroup>
+                    <label>Tipo de Servicio</label>
+                    <input className="form-control" type="texte"   name="TipoServicio" readOnly id="TipoServicio" value={form?form.TipoServicio:''}/>
+                    <label>Vehiculo</label>
+                    <input className="form-control" type="texte"   name="Vehiculo" readOnly id="Vehiculo"  value={form?form.Vehiculo:''}/>
+                    <label>Mecanico</label>
+                    <input className="form-control" type="texte"   name="Mecanico" readOnly id="Mecanico"  value={form?form.Mecanico:''}/>
                 </ModalBody>
                 <ModalFooter>
+                <Button onClick={()=>this.cambiar()}>Finalizar reparación:<FontAwesomeIcon icon={faCheck}/></Button>
                     <Button className="btn btn-primary" onClick={()=>this.validaciones()}>
-                  <FontAwesomeIcon icon={faFloppyDisk}/>
+                  Actualizar:<FontAwesomeIcon icon={faFloppyDisk}/>
                   </Button>
                     <Button className="btn btn-danger" onClick={()=>this.modalE()}><FontAwesomeIcon icon={faRectangleXmark}/></Button>
                 </ModalFooter>

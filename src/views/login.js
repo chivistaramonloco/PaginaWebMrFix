@@ -27,42 +27,7 @@ class Login extends Component {
     });
     console.log(this.state.form);
   }
-  validacionesM=()=>{
-    let ts = document.getElementById("Username").value;
-    let cs = document.getElementById("Contrasena").value;
-    
-  
-    let checador = 0;
-    if (ts.length===0 )  {
-      document.getElementById("msgIDU").style.color= "red";
-      document.getElementById("Username").style.borderColor="red";
-    }else{
-      checador+=1;
-      document.getElementById("msgIDU").style.color= "";
-      document.getElementById("Username").style.borderColor="";
-    }
-      
-      if ( cs.length===0)  {
-        document.getElementById("msgIDC").style.color= "red";
-        document.getElementById("Contrasena").style.borderColor="red";
-        
-      }else{
-        checador+=1;
-        document.getElementById("msgIDC").style.color= "";
-        document.getElementById("Contrasena").style.borderColor="";
-      }
-        if(checador===2){   
-          this.iniciarSesionMecanico();
-        }else{
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'Faltan campos por llenar',
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }
-    }
+
  validaciones=()=>{
     let ts = document.getElementById("Username").value;
     let cs = document.getElementById("Contrasena").value;
@@ -98,7 +63,7 @@ class Login extends Component {
           })
         }
     }
-  iniciarSesion = async () => {
+    iniciarSesion = async () => {
     axios.get(`https://apifix.azurewebsites.net/API/empleados/login/` + this.state.form.Username)
       .then(response => {
         return response.data;
@@ -109,6 +74,7 @@ class Login extends Component {
             .then(response => {
               return response.data;
             })
+
             .then(response => {
               if (response.length > 0) {
                 var respuesta = response[0];
@@ -117,7 +83,7 @@ class Login extends Component {
                 Swal.fire({
                   position: 'center',
                   icon: 'success',
-                  title: (`Bienvenido ${respuesta.Username}`),
+                  title: (`Bienvenido administrador ${respuesta.Username}`),
                   showConfirmButton: false,
                   timer: 1500
                 })
@@ -136,44 +102,42 @@ class Login extends Component {
               console.log(error);
             })
         } else {
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'El usuario o la contraseña no son correctos',
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
-  }
-
-  iniciarSesionMecanico = async () => {
-    axios.get(`https://apifix.azurewebsites.net/API/mecanicos/login/` + this.state.form.Username)
-      .then(response => {
-        return response.data;
-      })
-      .then(response => {
-        if (response.length > 0) {
-          axios.get(`https://apifix.azurewebsites.net/API/mecanicos/loginc/` + this.state.form.Contrasena)
+          axios.get(`https://apifix.azurewebsites.net/API/mecanicos/login/` + this.state.form.Username)
             .then(response => {
               return response.data;
             })
             .then(response => {
               if (response.length > 0) {
-                var respuesta = response[0];
-                cookies.set('Username', respuesta.Username, { path: "/" });
-                cookies.set('Contrasena', respuesta.Contrasena, { path: "/" });
-                Swal.fire({
-                  position: 'center',
-                  icon: 'success',
-                  title: (`Bienvenido ${respuesta.Username}`),
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-                window.location.href = "./Estatuss";
+                axios.get(`https://apifix.azurewebsites.net/API/mecanicos/loginc/` + this.state.form.Contrasena)
+                  .then(response => {
+                    return response.data;
+                  })
+                  .then(response => {
+                    if (response.length > 0) {
+                      var respuesta = response[0];
+                      cookies.set('Username', respuesta.Username, { path: "/" });
+                      cookies.set('Contrasena', respuesta.Contrasena, { path: "/" });
+                      Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: (`Bienvenido mecanico ${respuesta.Username}`),
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                      window.location.href = "./Estatuss";
+                    } else {
+                      Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'El usuario o la contraseña no son correctos',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  })
               } else {
                 Swal.fire({
                   position: 'center',
@@ -187,20 +151,13 @@ class Login extends Component {
             .catch(error => {
               console.log(error);
             })
-        } else {
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'El usuario o la contraseña no son correctos',
-            showConfirmButton: false,
-            timer: 1500
-          })
         }
+
       })
       .catch(error => {
         console.log(error);
       })
-  }
+    }
   componentDidMount() {
     if (cookies.get('Username')) {
       window.location.href = "./Menu";
@@ -226,8 +183,7 @@ class Login extends Component {
           <input type="passworda"   name='Contrasena' id='Contrasena' placeholder="Contraseña" onChange={this.handleChange} value={this.state.form.Contrasena} />
           </FormGroup> 
           <span id="msgIDC" class="color"></span>
-          <Button onClick={() => this.validaciones()}> Iniciar Sesión Administrador </Button>
-          <Button onClick={() => this.validacionesM()}> Iniciar Sesión Mecanico </Button>
+          <Button onClick={() => this.validaciones()}> Iniciar Sesión</Button>
         </div>
       </div>
     );

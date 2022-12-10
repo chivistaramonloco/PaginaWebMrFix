@@ -82,28 +82,6 @@ window.Swal = Swal;
     pauseOnHover: true,
   }
 
-  const fetchProductos = async() => {
-   
-    const result = await axios.get('https://apifix.azurewebsites.net/API/productos');
-    const result2 = await axios.get('https://apifix.azurewebsites.net/API/servicios');
-    const result3 = await axios.get('https://apifix.azurewebsites.net/API/clientes/idc');
-    const result4 = await axios.get('https://apifix.azurewebsites.net/API/empleados/ide');
-    const result5 = await axios.get('https://apifix.azurewebsites.net/API/servicios/ids');
-    const result6 = await axios.get('https://apifix.azurewebsites.net/API/vehiculos/idv');
-    const result7 = await axios.get('https://apifix.azurewebsites.net/API/mecanicos/idm');
-    const result8 =  await axios.get('https://apifix.azurewebsites.net/API/ventas/last');
-   
-    setProductos(await result.data);
-    setServicios(await result2.data);
-    setidcli(await result3.data);
-    setidemp(await result4.data);
-    setidser(await result5.data);
-    setidveh(await result6.data);
-    setidmec(await result7.data);
-    setlast(await result8.data);
-    setIsLoading(false);
-    
-  }
 
   const addProductToCart = async(product) =>{
     // check if the adding product exist
@@ -218,12 +196,6 @@ window.Swal = Swal;
     )
   }
 
- 
-  useEffect(() => {
-    fetchProductos();
-  },[]);
-
-
   useEffect(() => {
     let newSubtotal = 0;
     let newSubtotal1 = 0;
@@ -242,10 +214,14 @@ window.Swal = Swal;
   const [status3, setStatus3] = useState(null);
   const [status4, setStatus4] = useState(null);
   const [status5, setStatus5] = useState(null);
-  
   const total=Subtotal+Subtotal1;
+  async function obten(id){
+    const result6 = await axios.get(`https://apifix.azurewebsites.net/API/vehiculos/obtener/`+id);
+    setidveh(await result6.data);
+  }
   function changeStatus(e) {
     setStatus(e.target.value);
+    obten(e.target.value);
   }
   function changeStatus2(e) {
     setStatus2(e.target.value);
@@ -293,13 +269,42 @@ window.Swal = Swal;
     state.formR.Estatus='En espera';
     return state.formR.Estatus
    }
+   const geobv=()=>{
+    state.formR.Observaciones='Esperando observaciones';
+    return state.formR.Observaciones
+   }
    const fechas=()=>{
     const current = new Date();
     const fecha = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
     state.formV.FechaVenta= fecha;
     return state.formV.FechaVenta;
   }
-  
+
+
+  const fetchProductos = async() => {
+    const result = await axios.get('https://apifix.azurewebsites.net/API/productos');
+    const result2 = await axios.get('https://apifix.azurewebsites.net/API/servicios');
+    const result3 = await axios.get('https://apifix.azurewebsites.net/API/clientes/nc');
+    const result4 = await axios.get('https://apifix.azurewebsites.net/API/empleados/ne');
+    const result5 = await axios.get('https://apifix.azurewebsites.net/API/servicios/ns');
+    
+    const result7 = await axios.get('https://apifix.azurewebsites.net/API/mecanicos/nm');
+    const result8 =  await axios.get('https://apifix.azurewebsites.net/API/ventas/last');
+
+    setProductos(await result.data);
+    setServicios(await result2.data);
+    setidcli(await result3.data);
+    setidemp(await result4.data);
+    setidser(await result5.data);
+    
+    setidmec(await result7.data);
+    setlast(await result8.data);
+    setIsLoading(false);
+    
+  }
+  useEffect(() => {
+    fetchProductos();
+  },[]);
   const peticionPostV=async()=>{
   await axios.post(`https://apifix.azurewebsites.net/API/ventas/agregar/`,state.formV).then(response=>{
    }).then(async() => {
@@ -329,17 +334,20 @@ const state={
     IDReparacion: '',
     IDVenta: '',
     Estatus: '',
-    IDServicio: '',
+    Observaciones: '',
+    TipoServicio: '',
     IDVehiculo: '',
-    IDMecanico: ''
+    Vehiculo: '',
+    Mecanico: ''
   },
   formV:{
     IDVenta: '',
     FechaVenta: '',
+    Total:'',
     IDCliente: '',
+    Cliente: '',
     IDEmpleado: '',
-    Total:''
-    
+    Empleado: ''
   },
   formP:{
     IDVenta: '',
@@ -351,7 +359,6 @@ const state={
 const validaciones=()=>{
   let ts = document.getElementById("IDCliente").value;
   let cs = document.getElementById("IDEmpleado").value;
-  
 
   let checador = 0;
   if (ts.length===0 )  {
@@ -363,13 +370,11 @@ const validaciones=()=>{
     document.getElementById("msgIDC").innerText = "";
     document.getElementById("msgIDC").style.color= "";
     document.getElementById("IDCliente").style.borderColor="";
-  }
-    
+  } 
     if ( cs.length===0)  {
       document.getElementById("msgIDE").innerText = "Campo Vacío";
       document.getElementById("msgIDE").style.color= "red";
       document.getElementById("IDEmpleado").style.borderColor="red";
-      
     }else{
       checador+=1;
       document.getElementById("msgIDE").innerText = "";
@@ -390,32 +395,30 @@ if(Subtotal1  === 0  ){
     })
   }
 }else{
-  let se = document.getElementById("IDServicio").value;
+  let ser = document.getElementById("IDServicio").value;
   let ve = document.getElementById("IDVehiculo").value;
   let me = document.getElementById("IDMecanico").value;
-  if ( se.length===0)  {
-    document.getElementById("msgIDS").innerText = "Campo Vacío";
-    document.getElementById("msgIDS").style.color= "red";
+  if ( ser.length===0)  {
+    document.getElementById("msgIDser").innerText = "Campo Vacío";
+    document.getElementById("msgIDser").style.color= "red";
     document.getElementById("IDServicio").style.borderColor="red";
-    
   }else{
     checador+=1;
-    document.getElementById("msgIDS").innerText = "";
-    document.getElementById("msgIDS").style.color= "";
+    document.getElementById("msgIDser").innerText = "";
+    document.getElementById("msgIDser").style.color= "";
     document.getElementById("IDServicio").style.borderColor="";
   }
-  if ( ve.length===0)  {
+  if (ve.length===0)  {
     document.getElementById("msgIDV").innerText = "Campo Vacío";
     document.getElementById("msgIDV").style.color= "red";
     document.getElementById("IDVehiculo").style.borderColor="red";
-    
   }else{
     checador+=1;
     document.getElementById("msgIDV").innerText = "";
     document.getElementById("msgIDV").style.color= "";
     document.getElementById("IDVehiculo").style.borderColor="";
   }
-  if ( me.length===0)  {
+  if (me.length===0)  {
     document.getElementById("msgIDM").innerText = "Campo Vacío";
     document.getElementById("msgIDM").style.color= "red";
     document.getElementById("IDMecanico").style.borderColor="red";
@@ -470,9 +473,10 @@ if(Subtotal1  === 0  ){
 <label>Cliente</label>
     <select type="texts" name="IDCliente" id="IDCliente" onChange={changeStatus} >  
     <option></option>
-    {idcl.map(cliente=>{    
-    return <option key={cliente.IDCliente} value={cliente.IDCliente}>{cliente.IDCliente}</option>;  
+    {idcl.map(cliente=>{ 
+    return <option key={cliente.NombreCompleto} value={cliente.IDCliente}>{cliente.NombreCompleto}</option>;  
       })}  
+      
     </select>
     <span id="msgIDC" class="color"></span>
     </FormGroup> 
@@ -481,7 +485,7 @@ if(Subtotal1  === 0  ){
     <select type="texts" name="IDEmpleado" id="IDEmpleado" onChange={changeStatus2} >  
     <option></option>
     {idem.map(empleado=>{    
-    return <option key={empleado.IDEmpleado} value={empleado.IDEmpleado}>{empleado.IDEmpleado}</option>;  
+    return <option key={empleado.NombreCompleto} value={empleado.IDEmpleado}>{empleado.NombreCompleto}</option>;  
       })} 
     </select>
     <span id="msgIDE" class="color"></span>
@@ -489,7 +493,7 @@ if(Subtotal1  === 0  ){
     <p type ="mostrar">{fechas()}{gide()}{gidc()}{gtotal()}{gids()}{gidven()}
       {gidv()}
      {gidm()}
-      {gestatu()}</p>
+      {gestatu()}{geobv()}</p>
     { (Subtotal1  ) !== 0 ? 
         <div >
           <p>Datos para una reparación</p>
@@ -498,17 +502,17 @@ if(Subtotal1  === 0  ){
           <select type="texts" name="IDServicio" id="IDServicio" onChange={changeStatus3} >  
           <option></option>
           {idser.map(servicio=>{    
-          return <option key={servicio.IDServicio} value={servicio.IDServicio}>{servicio.IDServicio}</option>;  
+          return <option key={servicio.TipoServicio} value={servicio.IDServicio}>{servicio.TipoServicio}</option>;  
            })} 
           </select>
-          <span id="msgIDS" class="color"></span>
+          <span id="msgIDser" class="color"></span>
           </FormGroup>
           <FormGroup> 
           <label>IDVehiculo</label>
           <select type="texts" name="IDVehiculo" id="IDVehiculo" onChange={changeStatus4} >  
           <option></option>
           {idveh.map(vehiculo=>{    
-          return <option key={vehiculo.IDVehiculo} value={vehiculo.IDVehiculo}>{vehiculo.IDVehiculo}</option>;  
+          return <option key={vehiculo.Automovil} value={vehiculo.IDVehiculo}>{vehiculo.Automovil}</option>;  
            })} 
           </select>
           <span id="msgIDV" class="color"></span>
@@ -518,17 +522,15 @@ if(Subtotal1  === 0  ){
           <select type="texts" name="IDMecanico" id="IDMecanico" onChange={changeStatus5} >  
           <option></option>
           {idmec.map(mecanico=>{    
-          return <option key={mecanico.IDMecanico} value={mecanico.IDMecanico}>{mecanico.IDMecanico}</option>;  
+          return <option key={mecanico.NombreCompleto} value={mecanico.IDMecanico}>{mecanico.NombreCompleto}</option>;  
            })} 
           </select>
            <span id="msgIDM" class="color"></span>
            </FormGroup> 
           </div> : ''
-          
           }
-    </div>
-       
         </div>
+      </div>
      <div class="grid">
      <div className="tables"> 
      <div class="one">  

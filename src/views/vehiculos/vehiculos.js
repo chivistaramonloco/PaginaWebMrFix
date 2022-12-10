@@ -21,7 +21,8 @@ state={
     MarcaVehiculo: '',
     NombreVehiculo: '',
     ModeloVehiculo: '',
-    IDCliente: ''
+    IDCliente: '',
+    ClienteCompleto:''
   } 
 }
 peticionGet=async()=>{
@@ -33,7 +34,7 @@ await axios.get(`https://apifix.azurewebsites.net/API/vehiculos`).then(response=
 }
 
 peticionGetid=async()=>{
-  await axios.get(`https://apifix.azurewebsites.net/API/clientes/idc`).then((response)=>{
+  await axios.get(`https://apifix.azurewebsites.net/API/clientes/nc`).then((response)=>{
     this.setState({  cliente: response.data });
   }).catch(error=>{
     console.log(error.message);
@@ -258,7 +259,7 @@ modalV=()=>{
             <td>{vehiculo.MarcaVehiculo}</td>
             <td>{vehiculo.NombreVehiculo}</td>
             <td>{vehiculo.ModeloVehiculo}</td>
-            <td>{vehiculo.IDCliente}</td>
+            <td>{vehiculo.ClienteCompleto}</td>
             <td>
               <button className="btn btn-primary" onClick={()=>{this.seleccionarVehiculo(vehiculo); this.modalV()}}><FontAwesomeIcon icon={faEdit}/></button>
               <button className="btn btn-danger" onClick={()=>{this.seleccionarVehiculo(vehiculo); this.peticionDelete()}}><FontAwesomeIcon icon={faTrashAlt}/></button>
@@ -296,7 +297,7 @@ modalV=()=>{
                     <select type="texte" name="IDCliente" id="IDCliente" onChange={this.handleChange} value={form?form.IDCliente: ''}  >  
                     <option></option>
                     {this.state.cliente.map(cliente=>{     
-                    return <option key={cliente.IDCliente} value={cliente.IDCliente}>{cliente.IDCliente}</option>;  
+                    return <option key={cliente.NombreCompleto} value={cliente.IDCliente}>{cliente.NombreCompleto}</option>;  
                     })}  
                     </select> 
                     <span id="msgID" class="color"></span>

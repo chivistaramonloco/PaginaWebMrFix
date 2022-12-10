@@ -11,6 +11,7 @@ import Mecanico from './views/mecanico/mecanico';
 import Productos from './views/productos/productos';
 import Estatus from './views/estatus/estatus';
 import Estatuss from './views/estatus/estatuss';
+import Historial from './views/estatus/historialestatus';
 function App( ) {
   return (
     <BrowserRouter >
@@ -26,6 +27,7 @@ function App( ) {
         <Route path='/Productos' element={<Productos />} />
         <Route path='/Estatus' element={<Estatus />} />
         <Route path='/Estatuss' element={<Estatuss />} />
+        <Route path='/Historial' element={<Historial/>} />
       </Routes>
     </BrowserRouter>
     
